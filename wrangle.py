@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from env import get_db_url
+from sklearn.model_selection import train_test_split
 
 
 
@@ -53,6 +54,15 @@ def handle_outliers(df):
     df = df[df.taxvaluedollarcnt < 2_000_000]
 
     return df
+
+
+def split_zillow_data(df):
+  
+        train_validate, test = train_test_split(df, test_size= .2, 
+                                                    random_state= 123)
+        train, validate = train_test_split(train_validate, test_size= .2, 
+                                                            random_state= 123)
+        return train, validate, test
 
 
 def wrangle_zillow():
