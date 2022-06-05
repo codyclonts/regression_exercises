@@ -53,16 +53,20 @@ def handle_outliers(df):
 
     df = df[df.taxvaluedollarcnt < 2_000_000]
 
+    df = df[df.calculatedfinishedsquarefeet < 100000]
+
     return df
 
 
 def split_zillow_data(df):
-  
-        train_validate, test = train_test_split(df, test_size= .2, 
-                                                    random_state= 123)
-        train, validate = train_test_split(train_validate, test_size= .2, 
-                                                            random_state= 123)
-        return train, validate, test
+
+    train_validate, test = train_test_split(df, test_size=.2, 
+        random_state=123)
+
+    train, validate = train_test_split(train_validate, test_size=.3, 
+        random_state=123)
+    return train, validate, test
+
 
 
 def wrangle_zillow():
@@ -70,6 +74,7 @@ def wrangle_zillow():
     df = handle_nulls(df)
     df = make_int(df)
     df = handle_outliers(df)
+    df['fips'].replace({6037 : 'LA' , 6059 : 'Orange' , 6111: 'Ventura'}, inplace = True)
     return df 
 
 
