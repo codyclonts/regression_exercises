@@ -20,8 +20,9 @@ def get_zillow_data():
     else:
         df = pd.read_sql(
             '''
-            SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt, yearbuilt, taxamount, fips  FROM properties_2017 
+            SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt, yearbuilt, taxamount, fips, parcelid  FROM properties_2017 
             JOIN propertylandusetype USING (propertylandusetypeid) 
+            JOIN predictions_2017 USING (parcelid)
             WHERE propertylandusedesc = 'Single Family Residential'; 
             '''
             ,
@@ -51,7 +52,7 @@ def handle_outliers(df):
     
     df = df[df.bedroomcnt <= 6]
 
-    df = df[df.taxvaluedollarcnt < 2_000_000]
+    df = df[df.taxvaluedollarcnt < 4_000_000]
 
     df = df[df.calculatedfinishedsquarefeet < 100000]
 
